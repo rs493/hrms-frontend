@@ -26,7 +26,10 @@ export function AppLayout() {
       {
         to: '/organization',
         label: 'Organization',
-        visible: can(Permissions.EMPLOYEE_VIEW) || can(Permissions.ROLE_MANAGE),
+        visible:
+          can(Permissions.DEPARTMENT_VIEW) ||
+          can(Permissions.DESIGNATION_VIEW) ||
+          can(Permissions.LOCATION_VIEW),
       },
       {
         to: '/roles',

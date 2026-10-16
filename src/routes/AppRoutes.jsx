@@ -71,7 +71,11 @@ export function AppRoutes() {
           <Route
             element={
               <ProtectedRoute
-                anyOf={[Permissions.EMPLOYEE_VIEW, Permissions.ROLE_MANAGE]}
+                anyOf={[
+                  Permissions.DEPARTMENT_VIEW,
+                  Permissions.DESIGNATION_VIEW,
+                  Permissions.LOCATION_VIEW,
+                ]}
               />
             }
           >

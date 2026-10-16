@@ -3,6 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createEmployee, listEmployees } from '../../api/employeeApi'
 import {
+  listDepartments,
+  listDesignations,
+  listOfficeLocations,
+} from '../../api/organizationApi'
+import {
   emptyEmployeeFormValues,
   EmployeeFormFields,
 } from '../../components/employees/EmployeeFormFields'
@@ -25,6 +30,21 @@ export function EmployeeCreatePage() {
   const managersQuery = useQuery({
     queryKey: ['employees'],
     queryFn: listEmployees,
+  })
+
+  const departmentsQuery = useQuery({
+    queryKey: ['departments'],
+    queryFn: listDepartments,
+  })
+
+  const designationsQuery = useQuery({
+    queryKey: ['designations'],
+    queryFn: listDesignations,
+  })
+
+  const officeLocationsQuery = useQuery({
+    queryKey: ['office-locations'],
+    queryFn: listOfficeLocations,
   })
 
   const mutation = useMutation({
@@ -70,6 +90,36 @@ export function EmployeeCreatePage() {
           values={values}
           onChange={setValues}
           managers={managersQuery.data ?? []}
+          departments={departmentsQuery.data ?? []}
+          designations={designationsQuery.data ?? []}
+          officeLocations={officeLocationsQuery.data ?? []}
+          departmentsLoading={departmentsQuery.isLoading}
+          designationsLoading={designationsQuery.isLoading}
+          officeLocationsLoading={officeLocationsQuery.isLoading}
+          departmentsError={
+            departmentsQuery.isError
+              ? getErrorMessage(
+                  departmentsQuery.error,
+                  'Could not load departments.',
+                )
+              : null
+          }
+          designationsError={
+            designationsQuery.isError
+              ? getErrorMessage(
+                  designationsQuery.error,
+                  'Could not load designations.',
+                )
+              : null
+          }
+          officeLocationsError={
+            officeLocationsQuery.isError
+              ? getErrorMessage(
+                  officeLocationsQuery.error,
+                  'Could not load office locations.',
+                )
+              : null
+          }
           fieldErrors={fieldErrors}
           disabled={mutation.isPending}
         />

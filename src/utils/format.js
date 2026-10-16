@@ -38,11 +38,36 @@ export function formatRoleName(value) {
   return value.replaceAll('_', ' ')
 }
 
+/** Calendar date strings (e.g. joiningDate). No timezone conversion. */
 export function formatDate(value) {
   if (!value) {
     return '—'
   }
   return value
+}
+
+/** Instant / ISO date-time from the API, displayed in IST (Asia/Kolkata). */
+export function formatDateTime(timestamp) {
+  if (!timestamp) {
+    return '—'
+  }
+
+  const date = new Date(timestamp)
+
+  if (Number.isNaN(date.getTime())) {
+    return '—'
+  }
+
+  return date.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  })
 }
 
 export function fullName(firstName, lastName) {

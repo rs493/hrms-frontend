@@ -28,9 +28,9 @@ export function validateEmployeeForm(values) {
   if (!values.joiningDate) errors.joiningDate = 'Joining date is required.'
 
   for (const [key, label] of [
-    ['departmentId', 'Department ID'],
-    ['designationId', 'Designation ID'],
-    ['locationId', 'Location ID'],
+    ['departmentId', 'Department'],
+    ['designationId', 'Designation'],
+    ['locationId', 'Office Location'],
     ['shiftId', 'Shift ID'],
     ['managerId', 'Manager'],
   ]) {

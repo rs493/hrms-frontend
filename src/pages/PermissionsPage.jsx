@@ -15,7 +15,7 @@ import {
   ErrorState,
   LoadingBlock,
 } from '../components/ui/StateBlock'
-import { formatDate } from '../utils/format'
+import { formatDateTime } from '../utils/format'
 import { getErrorMessage } from '../utils/errors'
 
 export function PermissionsPage() {
@@ -132,8 +132,8 @@ export function PermissionsPage() {
                     <tr key={permission.permissionId}>
                       <td>{permission.permissionId}</td>
                       <td>{permission.permissionCode}</td>
-                      <td>{formatDate(permission.createdAt)}</td>
-                      <td>{formatDate(permission.updatedAt)}</td>
+                      <td>{formatDateTime(permission.createdAt)}</td>
+                      <td>{formatDateTime(permission.updatedAt)}</td>
                       <td>
                         <Button
                           variant="danger"

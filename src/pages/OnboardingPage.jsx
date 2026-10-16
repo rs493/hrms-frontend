@@ -2,7 +2,12 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { listEmployees } from '../api/employeeApi'
-import { onboard } from '../api/onboardingApi'
+import { onboard, resendInvite } from '../api/onboardingApi'
+import {
+  listDepartments,
+  listDesignations,
+  listOfficeLocations,
+} from '../api/organizationApi'
 import { useAuth } from '../auth/AuthContext'
 import { onboardingPermissionForRole } from '../auth/permissions'
 import {
@@ -54,6 +59,21 @@ export function OnboardingPage() {
     queryFn: listEmployees,
   })
 
+  const departmentsQuery = useQuery({
+    queryKey: ['departments'],
+    queryFn: listDepartments,
+  })
+
+  const designationsQuery = useQuery({
+    queryKey: ['designations'],
+    queryFn: listDesignations,
+  })
+
+  const officeLocationsQuery = useQuery({
+    queryKey: ['office-locations'],
+    queryFn: listOfficeLocations,
+  })
+
   const mutation = useMutation({
     mutationFn: onboard,
     onSuccess: async (response) => {
@@ -61,6 +81,16 @@ export function OnboardingPage() {
       await queryClient.invalidateQueries({ queryKey: ['employees'] })
       setValues(emptyEmployeeFormValues())
       setEmail('')
+    },
+    onError: (err) => setError(getErrorMessage(err)),
+  })
+
+  const resendMutation = useMutation({
+    mutationFn: (userId) => resendInvite(userId),
+    onSuccess: async (response) => {
+      setResult(response)
+      setError(null)
+      await queryClient.invalidateQueries({ queryKey: ['employees'] })
     },
     onError: (err) => setError(getErrorMessage(err)),
   })
@@ -127,6 +157,20 @@ export function OnboardingPage() {
           <UserStatusBadge status={result.userStatus} /> · Role{' '}
           {formatRoleName(result.role)}.{' '}
           <Link to={`/employees/${result.employeeId}`}>View employee</Link>
+          {result.userStatus === 'INVITED' && result.userId ? (
+            <>
+              {' '}
+              <Button
+                type="button"
+                variant="secondary"
+                loading={resendMutation.isPending}
+                disabled={mutation.isPending}
+                onClick={() => resendMutation.mutate(result.userId)}
+              >
+                Resend invite
+              </Button>
+            </>
+          ) : null}
         </Alert>
       ) : null}
 
@@ -137,6 +181,36 @@ export function OnboardingPage() {
           values={values}
           onChange={setValues}
           managers={managersQuery.data ?? []}
+          departments={departmentsQuery.data ?? []}
+          designations={designationsQuery.data ?? []}
+          officeLocations={officeLocationsQuery.data ?? []}
+          departmentsLoading={departmentsQuery.isLoading}
+          designationsLoading={designationsQuery.isLoading}
+          officeLocationsLoading={officeLocationsQuery.isLoading}
+          departmentsError={
+            departmentsQuery.isError
+              ? getErrorMessage(
+                  departmentsQuery.error,
+                  'Could not load departments.',
+                )
+              : null
+          }
+          designationsError={
+            designationsQuery.isError
+              ? getErrorMessage(
+                  designationsQuery.error,
+                  'Could not load designations.',
+                )
+              : null
+          }
+          officeLocationsError={
+            officeLocationsQuery.isError
+              ? getErrorMessage(
+                  officeLocationsQuery.error,
+                  'Could not load office locations.',
+                )
+              : null
+          }
           fieldErrors={fieldErrors}
           disabled={mutation.isPending}
         />

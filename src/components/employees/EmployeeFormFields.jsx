@@ -36,6 +36,15 @@ export function EmployeeFormFields({
   values,
   onChange,
   managers,
+  departments = [],
+  designations = [],
+  officeLocations = [],
+  departmentsLoading = false,
+  designationsLoading = false,
+  officeLocationsLoading = false,
+  departmentsError = null,
+  designationsError = null,
+  officeLocationsError = null,
   fieldErrors = {},
   disabled,
 }) {
@@ -153,49 +162,99 @@ export function EmployeeFormFields({
       <div className="panel-section">
         <h2 className="section-title">Organization</h2>
         <p className="hint" style={{ marginBottom: '1rem' }}>
-          Department, designation, location, and shift master-data APIs are not
-          available yet. Optional numeric IDs can be entered when known.
+          Department, designation, and office location are optional. Shift still
+          uses a numeric ID until the Attendance module provides shift master
+          data.
         </p>
         <div className="form-grid">
           <FormField
-            label="Department ID"
+            label="Department"
             htmlFor="departmentId"
-            hint="Optional"
+            hint={
+              departmentsError
+                ? departmentsError
+                : departmentsLoading
+                  ? 'Loading departments…'
+                  : 'Optional'
+            }
+            error={fieldErrors.departmentId}
           >
-            <input
+            <select
               id="departmentId"
-              className="input"
-              inputMode="numeric"
+              className="select"
               value={values.departmentId}
-              disabled={disabled}
+              disabled={disabled || departmentsLoading}
               onChange={(event) => update({ departmentId: event.target.value })}
-            />
+            >
+              <option value="">Select Department</option>
+              {departments.map((department) => (
+                <option
+                  key={department.departmentId}
+                  value={department.departmentId}
+                >
+                  {department.departmentName}
+                </option>
+              ))}
+            </select>
           </FormField>
           <FormField
-            label="Designation ID"
+            label="Designation"
             htmlFor="designationId"
-            hint="Optional"
+            hint={
+              designationsError
+                ? designationsError
+                : designationsLoading
+                  ? 'Loading designations…'
+                  : 'Optional'
+            }
+            error={fieldErrors.designationId}
           >
-            <input
+            <select
               id="designationId"
-              className="input"
-              inputMode="numeric"
+              className="select"
               value={values.designationId}
-              disabled={disabled}
+              disabled={disabled || designationsLoading}
               onChange={(event) =>
                 update({ designationId: event.target.value })
               }
-            />
+            >
+              <option value="">Select Designation</option>
+              {designations.map((designation) => (
+                <option
+                  key={designation.designationId}
+                  value={designation.designationId}
+                >
+                  {designation.designationName}
+                </option>
+              ))}
+            </select>
           </FormField>
-          <FormField label="Location ID" htmlFor="locationId" hint="Optional">
-            <input
+          <FormField
+            label="Office Location"
+            htmlFor="locationId"
+            hint={
+              officeLocationsError
+                ? officeLocationsError
+                : officeLocationsLoading
+                  ? 'Loading office locations…'
+                  : 'Optional'
+            }
+            error={fieldErrors.locationId}
+          >
+            <select
               id="locationId"
-              className="input"
-              inputMode="numeric"
+              className="select"
               value={values.locationId}
-              disabled={disabled}
+              disabled={disabled || officeLocationsLoading}
               onChange={(event) => update({ locationId: event.target.value })}
-            />
+            >
+              <option value="">Select Office Location</option>
+              {officeLocations.map((location) => (
+                <option key={location.locationId} value={location.locationId}>
+                  {location.locationName}
+                </option>
+              ))}
+            </select>
           </FormField>
           <FormField label="Shift ID" htmlFor="shiftId" hint="Optional">
             <input

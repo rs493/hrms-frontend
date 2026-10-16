@@ -14,7 +14,12 @@ import { PageHeader } from '../../components/ui/PageHeader'
 import { EmployeeStatusBadge } from '../../components/ui/StatusBadge'
 import { ErrorState, LoadingBlock } from '../../components/ui/StateBlock'
 import { Permissions } from '../../types/permission'
-import { formatDate, formatEmploymentType, fullName } from '../../utils/format'
+import {
+  formatDate,
+  formatDateTime,
+  formatEmploymentType,
+  fullName,
+} from '../../utils/format'
 import { getErrorMessage } from '../../utils/errors'
 import { ApiError } from '../../types/api'
 
@@ -168,9 +173,9 @@ export function EmployeeDetailPage() {
           <h2 className="section-title">Audit</h2>
           <dl className="meta-list">
             <dt>Created</dt>
-            <dd>{formatDate(employee.createdAt)}</dd>
+            <dd>{formatDateTime(employee.createdAt)}</dd>
             <dt>Updated</dt>
-            <dd>{formatDate(employee.updatedAt)}</dd>
+            <dd>{formatDateTime(employee.updatedAt)}</dd>
           </dl>
         </div>
       </div>

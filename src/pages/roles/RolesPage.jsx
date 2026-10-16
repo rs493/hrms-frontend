@@ -19,7 +19,7 @@ import {
   LoadingBlock,
 } from '../../components/ui/StateBlock'
 import { ALL_ROLE_NAMES } from '../../types/enums'
-import { formatDate, formatRoleName } from '../../utils/format'
+import { formatDateTime, formatRoleName } from '../../utils/format'
 import { getErrorMessage } from '../../utils/errors'
 
 export function RolesPage() {
@@ -132,8 +132,8 @@ export function RolesPage() {
                     <tr key={role.roleId}>
                       <td>{role.roleId}</td>
                       <td>{formatRoleName(role.roleName)}</td>
-                      <td>{formatDate(role.createdAt)}</td>
-                      <td>{formatDate(role.updatedAt)}</td>
+                      <td>{formatDateTime(role.createdAt)}</td>
+                      <td>{formatDateTime(role.updatedAt)}</td>
                       <td>
                         <div className="inline-actions">
                           <Link

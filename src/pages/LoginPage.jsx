@@ -4,10 +4,11 @@ import { useAuth } from '../auth/AuthContext'
 import { Alert } from '../components/ui/Alert'
 import { Button } from '../components/ui/Button'
 import { FormField } from '../components/ui/FormField'
+import { LoadingBlock } from '../components/ui/StateBlock'
 import { getErrorMessage } from '../utils/errors'
 
 export function LoginPage() {
-  const { login, isAuthenticated } = useAuth()
+  const { login, isAuthenticated, bootstrapping } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from ?? '/'
@@ -17,6 +18,10 @@ export function LoginPage() {
   const [fieldErrors, setFieldErrors] = useState({})
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+
+  if (bootstrapping) {
+    return <LoadingBlock label="Checking session…" />
+  }
 
   if (isAuthenticated) {
     return <Navigate to={from} replace />
