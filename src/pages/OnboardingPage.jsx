@@ -92,7 +92,10 @@ export function OnboardingPage() {
       setError(null)
       await queryClient.invalidateQueries({ queryKey: ['employees'] })
     },
-    onError: (err) => setError(getErrorMessage(err)),
+    onError: (err) => {
+      setError(getErrorMessage(err))
+      setResult(null)
+    },
   })
 
   const onSubmit = (event) => {
